@@ -44,7 +44,7 @@ public class UnitTest1
         Assert.Throws<Exception>(() => reserva.CadastrarHospedes(hospedes));
     }
     [Fact]
-    public void DeveCalcularValorDiarioCorreto()
+    public void DeveCalcularValorDiarioCorretoComDesconto()
     {
         List<Pessoa> hospedes =
         [
@@ -65,5 +65,26 @@ public class UnitTest1
 
         // Assert
         Assert.Equal(900, diaria);
+    }
+    [Fact]
+    public void DeveCalcularValorDiarioCorretoSemDesconto()
+    {
+        List<Pessoa> hospedes =
+        [
+            new Pessoa(nome: "Hóspede 1"),
+            new Pessoa(nome: "Hóspede 2")
+        ];
+        
+        Suite suite = new(tipoSuite: "Premium", capacidade: 2, valorDiaria: 100);
+
+        Reserva reserva = new(diasReservados: 5);
+        reserva.CadastrarSuite(suite);
+        reserva.CadastrarHospedes(hospedes);
+
+        // Act
+        decimal diaria = reserva.CalcularValorDiaria();
+
+        // Assert
+        Assert.Equal(500, diaria);
     }
 }
